@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+
+<meta name="theme-color" content="#0a6670">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kinder QuickRef">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<title>Kinderanästhesie QuickRef iPhone v0.3</title>
+<style>
+:root{
+ --bg:#edf3f5;--card:#fff;--ink:#17272e;--muted:#60717a;--line:#d8e2e6;
+ --brand:#0b6570;--brand2:#0c7f8b;--soft:#e6f3f4;--warn:#fff4d9;--danger:#fff0f0;
+ --blue:#e9f2ff;--green:#e8f6ee
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.43 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{background:linear-gradient(135deg,#0a6670,#084b68);color:#fff;padding:22px 16px}
+.wrap{max-width:1180px;margin:auto}
+h1{font-size:27px;margin:0 0 4px}.subtitle{opacity:.85}
+main{padding:16px}
+.layout{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:930px){.layout{grid-template-columns:365px 1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 2px 12px #00000008}
+.sticky{position:sticky;top:10px;align-self:start}
+@media(max-width:929px){.sticky{position:static}}
+label{display:block;font-weight:700;margin:10px 0 5px}
+input,select,button{width:100%;font:inherit;padding:10px 11px;border:1px solid #bfd0d7;border-radius:10px;background:#fff;color:var(--ink)}
+button{cursor:pointer;border:0;background:var(--brand);color:#fff;font-weight:750}
+button.secondary{background:#e5edf0;color:#1b3942}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.quick{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.quick button{width:auto;border-radius:999px;padding:7px 10px;background:#e6eef1;color:#27454e}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.kpi{border-radius:12px;padding:11px;background:var(--soft)}
+.kpi b{display:block;color:var(--brand);font-size:22px}
+.small{font-size:12px;color:var(--muted)}
+.notice{padding:11px 12px;border-radius:11px;background:var(--warn);font-size:13px;margin:10px 0}
+.notice.red{background:var(--danger)}
+.tabs{display:flex;gap:7px;overflow:auto;padding-bottom:5px;margin-bottom:12px}
+.tab{width:auto;white-space:nowrap;background:#e5edef;color:#29434b}
+.tab.active{background:var(--brand);color:#fff}
+.section{display:none}.section.active{display:block}
+.section h2{margin:4px 0 12px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--muted);font-size:12px}
+.group-title{font-size:17px;margin:18px 0 7px;color:#24424b}
+.med{border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0}
+.medtop{display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
+.med h3{font-size:15px;margin:0 0 4px}
+.calc{font-size:19px;font-weight:800;color:var(--brand);margin-top:4px}
+.badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.badge{display:inline-block;padding:3px 7px;border-radius:999px;background:#edf2f4;color:#53666e;font-size:11px}
+.badge.old{background:#fff1d5;color:#7a5a10}.badge.now{background:#e4f5e9;color:#21683b}
+.source-dose{font-size:12px;color:var(--muted);margin-top:6px}
+.searchbar{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:10px}
+.searchbar input{background:#fafcfd}
+.hidden{display:none!important}
+.hr{border:0;border-top:1px solid var(--line);margin:15px 0}
+.footer{font-size:12px;color:var(--muted);padding:10px 0 26px}
+.statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+@media(min-width:620px){.statgrid{grid-template-columns:repeat(4,1fr)}}
+.stat{background:#f6f9fa;border:1px solid var(--line);border-radius:12px;padding:10px}
+.stat b{display:block;font-size:18px}
+.stat span{font-size:11px;color:var(--muted)}
+.pill{display:inline-block;padding:3px 7px;border-radius:999px;background:var(--blue);font-size:11px;color:#28527a}
+
+@media(max-width:600px){
+  body{font-size:16px}
+  header{padding:calc(14px + env(safe-area-inset-top)) 14px 14px}
+  main{padding:10px 10px calc(18px + env(safe-area-inset-bottom))}
+  .card{border-radius:14px;padding:13px}
+  .tabs{position:sticky;top:0;z-index:20;background:var(--card);padding-top:4px}
+  .tab{min-height:44px;padding:10px 13px}
+  input,select,button{min-height:44px;font-size:16px}
+  .quick button{min-height:40px;padding:8px 12px}
+  .kpis{grid-template-columns:1fr 1fr}
+  .kpi b{font-size:20px}
+  table{font-size:14px}
+  th,td{padding:8px 6px}
+  .calc{font-size:18px}
+  .med{padding:11px}
+  h1{font-size:23px}
+  h2{font-size:20px}
+}
+@media(display-mode:standalone){
+  header{padding-top:calc(18px + env(safe-area-inset-top))}
+}
+
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>Kinderanästhesie QuickRef <span style="font-size:14px;opacity:.75">iPhone v0.3</span></h1>
+<div class="subtitle">Alter → Schätzwerte · Gewicht → Dosisberechnung · Material · Normalwerte · Bult-Medikamentenliste</div>
+</div></header>
+<main class="wrap">
+
+<div class="card" id="installHint" style="margin-bottom:12px;background:#f6fbfc">
+  <b>📱 iPhone-Tipp:</b>
+  <span class="small">In Safari öffnen → Teilen → „Zum Home-Bildschirm“. Danach startet QuickRef wie eine eigene App.</span>
+</div>
+
+<div class="layout">
+<aside class="card sticky">
+<h2 style="margin-top:0">Patient</h2>
+<label>Alter</label>
+<div class="row">
+<input id="ageValue" type="number" min="0" step="0.1" value="4">
+<select id="ageUnit"><option value="years">Jahre</option><option value="months">Monate</option></select>
+</div>
+<div class="quick">
+<button data-m="0">FG</button><button data-m="0.1">NG</button><button data-m="2">2 m</button>
+<button data-m="6">6 m</button><button data-m="12">1 a</button><button data-m="24">2 a</button>
+<button data-m="48">4 a</button><button data-m="72">6 a</button><button data-m="96">8 a</button><button data-m="144">12 a</button>
+</div>
+
+<div class="kpis">
+<div class="kpi"><span class="small">Gewicht geschätzt</span><b id="estWeight">–</b><span class="small">kg</span></div>
+<div class="kpi"><span class="small">Länge geschätzt</span><b id="estHeight">–</b><span class="small">cm</span></div>
+<div class="kpi"><span class="small">Cuffed ETT</span><b id="tubeKpi">–</b><span class="small">mm ID</span></div>
+<div class="kpi"><span class="small">LMA</span><b id="lmaKpi">–</b><span class="small">Größe</span></div>
+</div>
+
+<label>Gewicht für Berechnung (kg)</label>
+<input id="actualWeight" type="number" min="0.5" max="200" step="0.1">
+<div class="small">Schätzwert wird vorbelegt. Für klinische Berechnungen gemessenes Gewicht eintragen.</div>
+
+<label>Körperlänge gemessen (cm, optional)</label>
+<input id="actualHeight" type="number" min="30" max="220" step="0.5" placeholder="optional">
+
+<div class="notice red"><b>Sicherheitsmodus:</b> Diese App ist eine Referenz-/Simulationshilfe. Die Bult-Tabelle ist Version 2018. Vor realer Gabe immer aktuelle Fachinformation, lokale SOP, Alter, Indikation und Maximaldosis prüfen.</div>
+<button id="resetBtn" class="secondary">Schätzwerte zurücksetzen</button>
+</aside>
+
+<section class="card">
+<div class="tabs">
+<button class="tab active" data-tab="normals">Normalwerte</button>
+<button class="tab" data-tab="airway">Atemweg & Material</button>
+<button class="tab" data-tab="meds">Medikamente</button>
+<button class="tab" data-tab="fluids">Flußigkeit & Blut</button>
+<button class="tab" data-tab="emergency">Notfall aktuell</button>
+<button class="tab" data-tab="sources">Quellen</button>
+</div>
+
+<div id="normals" class="section active">
+<h2>Altersbezogene Normalwerte</h2>
+<div class="statgrid">
+<div class="stat"><span>Herzfrequenz</span><b id="hr">–</b><span>/min</span></div>
+<div class="stat"><span>systolischer RR</span><b id="sbp">–</b><span>mmHg</span></div>
+<div class="stat"><span>Atemfrequenz</span><b id="rr">–</b><span>/min</span></div>
+<div class="stat"><span>typisches KG</span><b id="bultWeight">–</b><span>kg</span></div>
+</div>
+<div class="notice"><b>Quelle:</b> „Maße & Dosierungen in der Kinderanästhesie, Kinderintensiv- und Kindernotfallmedizin“, Auf der Bult, Version 06 (08.06.2018). Die Bereiche sind Orientierungswerte, keine individuellen Grenzwerte.</div>
+<table>
+<tr><th>Alter</th><th>HF</th><th>syst. RR</th><th>AF</th><th>KG</th></tr>
+<tbody id="vitalTable"></tbody>
+</table>
+</div>
+
+<div id="airway" class="section">
+<h2>Atemweg & Material</h2>
+<table>
+<tr><th>Parameter</th><th>Berechneter / altersbezogener Wert</th></tr>
+<tr><td>ETT ohne Cuff</td><td id="tubeUncuffed">–</td></tr>
+<tr><td>ETT mit Cuff</td><td id="tubeCuffed">–</td></tr>
+<tr><td>Tubustiefe oral</td><td id="tubeDepthOral">–</td></tr>
+<tr><td>Tubustiefe nasal</td><td id="tubeDepthNasal">–</td></tr>
+<tr><td>Larynxmaske</td><td id="lma">–</td></tr>
+<tr><td>Atemzugvolumen</td><td id="vt">–</td></tr>
+<tr><td>Beatmungsfrequenz</td><td id="ventFreq">–</td></tr>
+<tr><td>PEEP (Bult 2018)</td><td>3–5 mbar</td></tr>
+<tr><td>Paw (Bult 2018)</td><td>13–20 mbar</td></tr>
+<tr><td>I:E (Bult 2018)</td><td>1:1,5–3,0</td></tr>
+</table>
+</div>
+
+<div id="meds" class="section">
+<h2>Medikamentenbibliothek</h2>
+<div class="searchbar"><input id="medSearch" placeholder="Medikament oder Kategorie suchen …"></div>
+<div class="notice"><b>Bult 2018:</b> Die folgenden Dosisangaben werden aus der veröffentlichten Bult-Tabelle übernommen und aus dem eingegebenen Gewicht berechnet. Sie sind bewusst als historische Referenz gekennzeichnet.</div>
+<div id="medList"></div>
+</div>
+
+<div id="fluids" class="section">
+<h2>Flüssigkeiten & Blut</h2>
+<div id="fluidList"></div>
+</div>
+
+<div id="emergency" class="section">
+<h2>Notfall – aktuelle Referenz</h2>
+<div class="notice"><b>Aktuelle Ebene:</b> Die folgenden Reanimationswerte orientieren sich an der RCUK Paediatric Emergency Drug Chart 2025/Februar 2026 und stehen getrennt von der historischen Bult-Liste.</div>
+<div id="currentEmergency"></div>
+</div>
+
+<div id="sources" class="section">
+<h2>Quellen & Datenstatus</h2>
+<div class="med"><h3>Auf der Bult – Maße & Dosierunge</h3><div>Version 06, Versionsdatum 08.06.2018. Grundlage für Normalwerte, Atemwegsgrößen und die umfangreiche Medikamentenbibliothek.</div><div class="badges"><span class="badge old">Bult 2018</span></div></div>
+<div class="med"><h3>Resuscitation Council UK</h3><div>Paediatric Emergency Drug Chart, Guidelines 2025; aktualisierte Ressourcen Februar 2026. Grundlage des Tabs “Notfall aktuell“.</div><div class="badges"><span class="badge now">aktuell 2025/26</span></div></div>
+<div class="med"><h3>WHO Growth Standards / Reference</h3><div>Wachstumsreferenzen 0–5 bzw. 5–19 Jahre. Die App zeigt derzeit eine vereinfachte interpolierte Größen-/Gewichtsorientierung und keine Perzentilenberechnung.</div></div>
+</div>
+</section>
+</div>
+<div class="footer">Kinderanästhesie QuickRef v0.2 · Offline · Referenz/Simulation · Keine automatische klinische Freigabe</div>
+</main>
+
+<script>
+const vitalRows=[
+ {m:0,label:"FG",w:"1,0–3,0",wn:2.5,hr:"130–180",sbp:">50",rr:"40–60",unc:"2,5–3,0",cuf:"–",oral:"6 + kg KG",nasal:"8–10",ma:"(#1)",vent:"40–60/min"},
+ {m:0.1,label:"NG",w:"3,5",wn:3.5,hr:"120–170",sbp:"60–80",rr:"40–60",unc:"3,0–3,5",cuf:"–",oral:"8–10",nasal:"11–12",lma:"(#1)",vent:"30–40/min"},
+ {m:2,label:"2 m",w:"4,5",wn:4.5,hr:"120–170",sbp:"60–80",rr:"25–40",unc:"3,0–3,5",cuf:"3,0",oral:"10–11",nasal:"12–13",lma:"(#1)",vent:"30–40/min"},
+ {m:6,label:"6 m",w:"7",wn:7,hr:"100–150",sbp:"70–110",rr:"25–40",unc:"3,5–4,0",cuf:"3,5",oral:"11",nasal:"13",lma:"#1½–2",vent:"25–0/min"},
+ {m:12,label:"12 m",w:"10",wn:10,hr:"100–150",sbp:"70–110",rr:"25–40",unc:"4,0",cuf:"3,5–4,0",oral:"12",nasal:"14",lma:"#1½–2",vent:"25–30/min"},
+ {m:18,label:"18 m",w:"12",wn:12,hr:"100–150",sbp:"70–110",rr:"25–40",unc:"4,0–4,5",cuf:"3,5–4,0",oral:"13",nasal:"15",lma:"#2–2½",vent:"20–25/min"},
+ {m:24,label:"2 a",w:"14",wn:14,hr:"80–130",sbp:">94",rr:"20–30",unc:"4,0–4,5",cuf:"4,0",oral:"13",nasal:"15",lma:"#2–2½",vent:"20–25/min"},
+ {m:48,label:"4 a",w:"17",wn:17,hr:"80–130",sbp:">98",rr:"20–30",unc:"5,0",cuf:"4,5",oral:"14",nasal:"17",lma:"#2–2½",vent:"1:–22/min"},
+ {m:72,label:"6 a",w:"21",wn:21,hr:"70–110",sbp:">102",rr:"20–25",unc:"5,5",cuf:"5,0",oral:"15",nasal:"18",lma:"#2½–3",vent:"1:–22/min"},
+ {m:96,label:"8 a",w:"25",wn:25,hr:"70–110",sbp:">106",rr:"20–25",unc:"6,0",cuf:"5,5",oral:"16",nasal:"20",lma:"#2½–3",vent:"16–20/min"},
+ {m:120,label:"10 a",w:"31",wn:31,hr:"70–110",sbp:">110",rr:"20–25",unc:"6,5",cuf:"6,0",oral:"18",nasal:"22",lma:"#3–4",vent:"16–20/min"},
+ {m:144,label:"12 a",w:"40",wn:40,hr:"60–100",sbp:">114",rr:"12–20",unc:"7,0",cuf:"6,5",oral:"20",nasal:"24",lma:"#3–4",vent:"16–20/min"}
+];
+
+const growthRows=[
+ {m:0,w:3.5,h:49.5},{m:2,w:4.5,h:57},{m:6,w:7,h:67},{m:12,w:10,h:75.5},{m:18,w:12,h:82},
+ {m:24,w:14,h:87},{m:48,w:17,h:103.5},{m:72,w:21,h:116},{m:96,w:25,h:128},{m:120,w:31,h:138},{m:144,w:40,h:150}
+];
+
+const meds=[
+["Prämedikation","Midazolam","0,5 mg/kg p.o./rekt",.5,"mg"],
+["Prämedikation","Clonidin","4 µg/kg p.o.",4,"µg"],
+["Prämedikation","Lorazepam","0,1 mg/kg buccal (max. 2,5 mg)",.1,"mg",2.5],
+["Sedierung / Antikonvulsiva","Midazolam","(0,2–)0,5 mg/kg i.v./nasal (max. 15 mg)",.5,"mg",15],
+["Sedierung / Antikonvulsiva","Esketamin","(7–)4 mg/kg nasal",4,"mg"],
+["Sedierung / Antikonvulsiva","Metohexital","30 mg/kg rektal",30,"mg"],
+["Sedierung / Antikonvulsiva","Lorazepam","0,3–0,1 mg/kg i.v. (max. 4 mg)",.1,"mg",4],
+["Sedierung / Antikonvulsiva","Clonazepam","0,05 mg/kg i.v. (max. 2 mg)",.05,"mg",2],
+["Sedierung / Antikonvulsiva","Diazepam","0,2–0,5 mg/kg i.v.",.5,"mg"],
+["Sedierung / Antikonvulsiva","Chloralhydrat","30–50 mg/kg rektal/p.o.",50,"mg"],
+["Sedierung / Antikonvulsiva","Promethazin","0,5–1,5 mg/kg p.o./i.v.",1.5,"mg"],
+["Sedierung / Antikonvulsiva","Levomepromazin","0,4–1,0 mg/kg p.o./i.v.",1,"mg"],
+["Hypnotika","Thiopental","3–7 mg/kg",7,"mg"],
+["Hypnotika","Metohexital","1–3 mg/kg",3,"mg"],
+["Hypnotika","Propofol","3–6 mg/kg",6,"mg"],
+["Hypnotika","Propofol Infusion","4–8–10 mg/kg/h",10,"mg/h"],
+["Hypnotika","Etomidate","0,2–0,3 mg/kg",.3,"mg"],
+["Hypnotika","Esketamin","1–2 mg/kg i.v. (2–4 mg/kg i.m.)",2,"mg"],
+["Muskelrelaxanzien","Mivacurium","0,2 mg/kg",.2,"mg"],
+["Muskelrelaxanzien","Rocuronium","(0,3–)0,6(–0,9) mg/kg",.6,"mg"],
+["Muskelrelaxanzien","Cisatracurium","0,15 mg/kg",.15,"mg"],
+["Muskelrelaxanzien","Vecuronium","0,1 mg/kg",.1,"mg"],
+["Muskelrelaxanzien","Pancuronium","0,1 mg/kg",.1,"mg"],
+["Muskelrelaxanzien","Succinylcholin","1–2 mg/kg",2,"mg"],
+["Antagonisten","Neostigmin","40 µg/kg (+ Atropin)",40,"µg"],
+["Antagonisten","Naloxon","5 ¥g/kg titrierend",5,"µg"],
+["Antagonisten","Flumazenil","10 µg/kg titrierend",10,"µg"],
+["Notfallmedikamente – Bult 2018","Adrenalin Reanimation","10 µg/kg i.v. (1:10.000 = 0,1 ml/kg)",10,"µg"],
+["Notfallmedikamente – Bult 2018","Adrenalin Anaphylaxie","150–500 µg i.m.",null,null],
+["Notfallmedikamente – Bult 2018","Atropin","20 µg/kg (mind. 100 µg)",20,"µg",null,100],
+["Notfallmedikamente – Bult 2018","Ca-Glukonat 10%","0,25–0,5 ml/kg",.5,"ml"],
+["Notfallmedikamente – Bult 2018","Mg-Sulfat 10%","0,5–1,0 ml/kg",1,"ml"],
+["Notfallmedikamente – Bult 2018","Amiodaron","5 mg/kg",5,"mg"],
+["Notfallmedikamente – Bult 2018","Adenosin","100–200–300 µg/kg",300,"µg"],
+["Notfallmedikamente – Bult 2018","NaHCO� 8,4% → 4,2%","½-Korrektur: BE × kg × 0,3 = ml",null,null],
+["Opioide","Fentanyl","1–5 g/kg",5,"µg"],
+["Opioide","Fentanyl „Kardiodosis “","10–50 µg/kg",50,"µg"],
+["Opioide","Fentanyl intranasal","2 g/kg",2,"µg"],
+["Opioide","Sufentanil","0,1–1,0 µg/kg",1,"µg"],
+["Opioide","Sufentanil Infusion","0,1-1,0 µg/kg/h",1,"µg/h"],
+["Opioide","Alfentanil","5–50 µg/kg",50,"µg"],
+["Opioide","Alfentanil Infusion","13–100 ¥g/kg/h",100,"µg/h"],
+["Opioide","Remifentanil","0,5–2 g/kg",2,"µg"],
+["Opioide","Remifentanil Infusion","0,1-1,0 µg/kg/min",1,"µg/min"],
+["Opioide","Piritramid","50–100 µg/kg Bolus (titriert)",100,"µg"],
+["Opioide","Morphin","25–50�–100) µg/kg i.v.",50,"µg"],
+["Opioide","Nalbuphin","0,1–0,2 mg/kg i.v.",.2,"mg"],
+["Opioide","Nalbuphin intranasal","0,4 mg/kg",.4,"mg"],
+["Opioide","Tramadol","1 mg/kg i.v.",1,"mg"],
+["Nicht-Opioidanalgetika","Metamizol","15 mg/kg i.v./p.o. 6-stündl.",15,"mg"],
+["Nicht-Opioidanalgetika","Ibuprofen (3 m)","10 mg/kg rektal/p.o. 8-stündl.",10,"mg"],
+["Nicht-Opioidanalgetika","Paracetamol rektal initial (¥3 kg)","40 mg/kg",40,"mg"],
+["Nicht-Opioidanalgetika","Paracetamol Folgedosis","15 mg/kg 6-stündl.",15,"mg"],
+["Nicht-Opioidanalgetika","Paracetamol i.v. <10 kg","7,5 mg/kg",7.5,"mg"],
+["Nicht-Opioidanalgetika","Paracetamol i.v. >10 kg","15 mg/kg",15,"mg"],
+["Nicht-Opioidanalgetika","Diclofenac (¥1 a)","1–1,5 mg/kg rektal/p.o. 8-stündl.",1.5,"mg"],
+["Lokalanästhetika – Maximaldosis","Ropivacain","3,0 mg/kg",3,"mg"],
+["Lokalanästhetika – Maximaldosis","Bupivacain","2,5 mg/kg",2.5,"mg"],
+["Lokalanästhetika – Maximaldosis","Lidocain","5 mg/kg",5,"mg"],
+["Lokalanästhetika – Maximaldosis","Mepivacain","7 mg/kg",7,"mg"],
+["Lokalanästhetika – Maximaldosis","Prilocain","6 mg/kg",6,"mg"],
+["Sonstige Medikamente","Adrenalin Inhalation","2–8 mg",null,null],
+["Sonstige Medikamente","Salbutamol Inhalation","2,5–5 mg in 2–4 ml NaCl 0,9%",null,null],
+["Sonstige Medikamente","Theophyllin","5 mg/kg",5,"mg"],
+["Sonstige Medikamente","Glycopyrrolat","10 µg/kg",10,"µg"],
+["Sonstige Medikamente","Dexamethason PONV-Prophylaxe","0,15 mg/kg (max. 4 mg)",.15,"mg",4],
+["Sonstige Medikamente","Dexamethason Anaphylaxie etc.","0,5 mg/kg",.5,"mg"],
+["Sonstige Medikamente","DHB PONV","10 µg/kg (max. 1,25 mg)",10,"µg",1250],
+["Sonstige Medikamente","Hydrocortison Stressdosis","4 mg/kg",4,"mg"],
+["Sonstige Medikamente","Prednisolon i.v. initial","4 mg/kg",4,"mg"],
+["Sonstige Medikamente","Furosemid i.v.","0,4–1,0 mg/kg",1,"mg"],
+["Sonstige Medikamente","Mannitol 10%","5–10 ml/kg (=0,4–1 g/kg)",10,"ml"],
+["Sonstige Medikamente","Ondansetron Prophylaxe","0,1 mg/kg (max. 4 mg)",.1,"mg",4],
+["Sonstige Medikamente","Ondansetron Therapie","0,2 mg/kg (max. 8 mg)",.2,"mg",8],
+["Sonstige Medikamente","Omeprazol","1 mg/kg p.o./i.v. (max. 40 mg)",1,"mg",40],
+["Sonstige Medikamente","Dimetinden","0,5–3,0 mg i.v./p.o.",null,null],
+["Sonstige Medikamente","Ranitidin","1 mg/kg (max. 50 mg) i.v.",1,"mg",50],
+["Antibiotika – Initialdosis i.v.","Amoxicillin","50 mg/kg (max. 2 g)",50,"mg",2000],
+["Antibiotika – Initialdosis i.v.","Amoxicillin/Clavulansäure","50 mg/kg (max. 2 g)",50,"mg",2000],
+["Antibiotika – Initialdosis i.v.","Ampicillin/Sulbactam","50 mg/kg (max. 2 g)",50,"mg",2000],
+["Antibiotika – Initialdosis i.v.","Cefuroxim","50 mg/kg (max. 1,5 g)",50,"mg",1500],
+["Antibiotika – Initialdosis i.v.","Cefotaxim","50–100 mg/kg (max. 2–4 g)",100,"mg",4000],
+["Antibiotika – Initialdosis i.v.","Ceftriaxon","50–100 mg/kg (max. 2–4 g)",100,"mg",4000],
+["Antibiotika – Initialdosis i.v.","Clindamycin","10 mg/kg (max. 1,2 g)",10,"mg",1200],
+["Antibiotika – Initialdosis i.v.","Metronidazol","15–0 mg/kg (max. 1 g)",30,"mg",1000],
+["Antibiotika – Initialdosis i.v.","Gentamicin","5 mg/kg",5,"mg"],
+["Antibiotika – Initialdosis i.v.","Vancomycin","10–20 mg/kg",20,"mg"],
+["Antibiotika – Initialdosis i.v.","Cotrimoxazol (TMP-Anteil)","(2,5–)4 mg/kg (max. 240 mg)",4,"mg",240],
+["Antibiotika – Initialdosis i.v.","Fosfomycin","100 mg/kg (max. 5 g)",100,"mg",5000],
+["Regionalanästhesie","Kaudalanästhesie Ropivacain 0,2%","1,0–1,5 ml/kg",1.5,"ml"],
+["Regionalanästhesie","PDK Ropivacain 0,2% Bolus","0,2–0,5 ml/kg",.5,"ml"],
+["Regionalanästhesie","PDK Ropivacain 0,2% Infusion","0,1–0,2 ml/kg/h",.2,"ml/h"],
+["Regionalanästhesie","Ilioinguinalisblock Ropivacain 0,2%","0,5 ml/kg",.5,"ml"],
+["Regionalanästhesie","TAP-Block Ropivacain 0,2%","2 ✕ 0,5 ml/kg",1,"ml"],
+["Regionalanästhesie","Extremitätenblock Ropivacain 0,2%","0,3–0,5 ml/kg",.5,"ml"],
+["Regionalanästhesie","Clonidin Zusatz ¥6 m","2 ¥g/kg",2,"µg"],
+["Regionalanästhesie","Wundrandinfiltration Ropivacain 0,2%","max. 1,5 ml/kg",1.5,"ml"],
+["Regionalanästhesie","Peniswurzelblock Bupivacain 0,5%","2 × 0,2 ml/kg (ohne Adrenalin)",.4,"ml"],
+["Inotrope & vasoaktive Medikamente","Adrenalin","0,1–1 µg/kg/min",1,"µg/min"],
+["Inotrope & vasoaktive Medikamente","Noradrenalin","0,1–1 µg/kg/min",1,"µg/min"],
+["Inotrope & vasoaktive Medikamente","Dopamin","5–15 µg/kg/min",15,"µg/min"],
+["Inotrope & vasoaktive Medikamente","Dobutamin","3–20 µg/kg/min",20,"µg/min"],
+["Inotrope & vasoaktive Medikamente","Enoximon","2,4–20 µg/kg/min",20,"µg/min"],
+["Inotrope & vasoaktive Medikamente","Milrinon","0,5–2 g/kg/min",2,"µg/min"],
+["Inotrope & vasoaktive Medikamente","Alprostadil","0,05–0,4 µg/kg/min",.4,"µg/min"],
+["Inotrope & vasoaktive Medikamente","Prostazyklin","0,05–0,2 g/kg/min",.2,"µg/min"],
+["Inotrope & vasoaktive Medikamente","Nitroglycerin","1–20 µg/kg/min",20,"µg/min"]
+];
+
+function fmt(n,d=1){return Number(n).toLocaleString("de-DE",{maximumFractionDigits:d,minimumFractionDigits:0})}
+function ageMonths(){const v=+document.getElementById("ageValue").value||0;return document.getElementById("ageUnit").value==="years"?v*12:v}
+function nearestVital(m){return vitalRows.reduce((a,b)=>Math.abs(b.m-m)<Math.abs(a.m-m)?b:a)}
+function interp(m,key){
+ if(m<=growthRows[0].m)return growthRows[0][key];
+ if(m>=growthRows.at(-1).m)return growthRows.at(-1)[key];
+ let bi=growthRows.findIndex(x=>x.i=m),ai=bi-1,A=growthRows[ai],B=growthRows[bi];
+ return A[key]+(B[key]-A[key])*(m-A.m)/(B.m-A.m);
+}
+function calcDisplay(kg,per,unit,maxv,minv){
+ if(per===null||per===undefined)return "siehe Referenzdosis";
+ let x=kg*per;
+ if(maxv!==undefined && maxv!==null)x=Math.min(x,maxv);
+ if(minv!==undefined && minv!==null)x=Math.max(x,minv);
+ return `${fmt(x,unit&&unit.includes("µg")?0:1)} ${unit}`;
+}
+function lmaByWeight(kg){if(kg<5)return "1";if(kg<10)return "1½";if(kg<20)return "2";if(kg<30)return "2½";if(kg<50)return "3";return "4"}
+function update(){
+ const m=ageMonths(),r=nearestVital(m),ew=interp(m,"w"),eh=interp(m,"h");
+ document.getElementById("estWeight").textContent=fmt(ew,1);
+ document.getElementById("estHeight").textContent=fmt(eh,1);
+ const aw=document.getElementById("actualWeight");
+ if(!aw.dataset.edited)aw.value=ew.toFixed(1);
+ const kg=+aw.value||ew;
+ document.getElementById("tubeKpi").textContent=r.cuf;
+ document.getElementById("lmaKpi").textContent=lmaByWeight(kg);
+ document.getElementById("hr").textContent=r.hr;
+ document.getElementById("sbp").textContent=r.sbp;
+ document.getElementById("rr").textContent=r.rr;
+ document.getElementById("bultWeight").textContent=r.w;
+ document.getElementById("tubeUncuffed").textContent=r.unc+" mm ID";
+ document.getElementById("tubeCuffed").textContent=r.cuf+" mm ID";
+ document.getElementById("tubeDepthOral").textContent=r.oral+" cm";
+ document.getElementById("tubeDepthNasal").textContent=r.nasal+" cm";
+ document.getElementById("lma").textContent="Größe "+r.lma+" (Bult-Altersklasse); gewichtsorientiert etwa "+lmaByWeight(kg);
+ document.getElementById("vt").textContent=`${fmt(6*kg,0)}–${fmt(10*kg,0)} ml (6–10 ml/kg; Bult 2018)`;
+ document.getElementById("ventFreq").textContent=r.vent;
+ renderMeds(kg);
+ renderFluids(kg);
+ renderCurrentEmergency(m,kg);
+}
+function renderVitals(){
+ document.getElementById("vitalTable").innerHTML=vitalRows.map(r=>`<tr><td>${r.label}</td><td>${r.hr}</td><td>${r.sbp}</td><td>${r.rr}</td><td>${r.w}</td></tr>`).join("");
+}
+function renderMeds(kg){
+ const q=(document.getElementById("medSearch").value||"").trim().toLowerCase();
+ const filtered=meds.filter(x=>(x[0]+" "+x[1]+" "+x[2]).toLowerCase().includes(q));
+ let last="",html="";
+ for(const x of filtered){
+   if(x[0]!==last){html+=`<div class="group-title">${x[0]}</div>`;last=x[0]}
+   const val=calcDisplay(kg,x[3],x[4],x[5],x[6]);
+   html+=`<div class="med">
+    <div class="medtop"><div><h3>${x[1]}</h3><div class="source-dose">${x[2]}</div></div><span class="badge old">Bult 2018</span></div>
+    <div class="calc">${val}</div>
+   </div>`;
+ }
+ document.getElementById("medList").innerHTML=html||'<div class="notice">Keine Treffer.</div>';
+}
+function renderFluids(kg){
+ function maint(kg){return 4*Math.min(kg,10)+2*Math.min(Math.max(kg-10,0),10)+Math.max(kg-20,0)}
+ document.getElementById("fluidList").innerHTML=`
+ <div class="med"><h3>Blutvolumen</h3><div class="calc">ca. ${fmt(80*kg,0)} ml</div><div class="source-dose">80 ml/kg · Bult 2018</div></div>
+ <div class="med"><h3>EK</h3><div class="calc">${fmt(15*kg,0)} ml</div><div class="source-dose">15 ml/kg → Hb + ca. 3–4 g/dl · Bult 2018</div></div>
+ <div class="med"><h3>FFP</h3><div class="calc">${fmt(10*kg,0)} ml</div><div class="source-dose">10 ml/kg · Bult 2018</div></div>
+ <div class="med"><h3>TK</h3><div class="calc">${fmt(10*kg,0)} ml</div><div class="source-dose">10 ml/kg · Bult 2018</div></div>
+ <div class="med"><h3>Erhaltungsbedarf (4-2-1)</h3><div class="calc">${fmt(maint(kg),1)} ml/h</div><div class="source-dose">4 ml/kg/h für 1–10 kg + 2 ml/kg/h für 11–20 kg + 1 ml/kg/h >20 kg · Bult 2018</div></div>
+ <div class="med"><h3>Intraoperativer Anhalt</h3><div class="calc">${fmt(10*kg,0)} ml/h</div><div class="source-dose">Ringer-Acetat 10 ml/kg/h + Blutverluste; ausdrücklich individuell anpassen · Bult 2018</div></div>`;
+}
+function renderCurrentEmergency(m,kg){
+ let ana;
+ if(m<6) ana="100–150 µg i.m.";
+ else if(m<=72) ana="150 µg i.m.";
+ else if(m<=144) ana="300 µg i.m.";
+ else ana="500 µg i.m.";
+ const cards=[
+ ["Adrenalin CPR IV/IO",`${fmt(10*kg,0)} µg`,`10 µg/kg`],
+ ["Flüssigkeitsbolus",`${fmt(10*kg,0)} ml`,`10 ml/kg isotones Kristalloid`],
+ ["Glukose 10% bei Hypoglykämie",`${fmt(2*kg,0)} ml`,`2 ml/kg; Neugeborene 2,5 ml/kg`],
+ ["Amiodaron",`${fmt(Math.min(5*kg,300),0)} mg`,`5 mg/kg; max. 300 mg`],
+ ["Atropin",`${fmt(Math.min(20*kg,600),0)} µg`,`20 µg/kg; max. 600 µg`],
+ ["Defibrillation initial",`${fmt(4*kg,0)} J`,`4 J/kg`],
+ ["Adrenalin bei Anaphylaxie",ana,"altersbasierte RCUK-Dosis"]
+ ];
+ document.getElementById("currentEmergency").innerHTML=cards.map(c=>`<div class="med"><div class="medtop"><h3>${c[0]}</h3><span class="badge now">aktuell 2025/26</span></div><div class="calc">${c[1]}</div><div class="source-dose">${c[2]}</div></div>`).join("");
+}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
+ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+ document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
+ b.classList.add("active");document.getElementById(b.dataset.tab).classList.add("active")
+});
+document.querySelectorAll(".quick button").forEach(b=>b.onclick=()=>{
+ const m=+b.dataset.m;
+ document.getElementById("ageUnit").value="months";document.getElementById("ageValue").value=m;
+ document.getElementById("actualWeight").dataset.edited="";update()
+});
+["ageValue","ageUnit"].forEach(id=>document.getElementById(id).addEventListener("input",()=>{document.getElementById("actualWeight").dataset.edited="";update()}));
+document.getElementById("actualWeight").addEventListener("input",e=>{e.target.dataset.edited="1";update()});
+document.getElementById("medSearch").addEventListener("input",()=>renderMeds(+document.getElementById("actualWeight").value||interp(ageMonths(),"w")));
+document.getElementById("resetBtn").onclick=()=>{document.getElementById("actualWeight").dataset.edited="";document.getElementById("actualHeight").value="";update()};
+renderVitals();update();
+</script>
+
+<script>
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+}
+</script>
+
+</body>
+</html>

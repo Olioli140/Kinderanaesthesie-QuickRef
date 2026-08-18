@@ -1,0 +1,21 @@
+{
+  "name": "Kinderanästhesie QuickRef",
+  "short_name": "Kinder QuickRef",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#edf3f5",
+  "theme_color": "#0a6670",
+  "description": "Kinderanästhesie QuickRef für Ausbildung, Simulation und strukturierte Referenz.",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
