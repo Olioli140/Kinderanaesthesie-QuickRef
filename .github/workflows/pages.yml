@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'index.html'
+      - 'fix-v04.js'
       - 'manifest.webmanifest'
       - 'service-worker.js'
       - 'icon-192.png'
@@ -33,10 +34,22 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Build static site
+        run: |
+          mkdir -p _site
+          cp index.html manifest.webmanifest service-worker.js fix-v04.js icon-192.png icon-512.png apple-touch-icon.png _site/
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('_site/index.html')
+          s = p.read_text(encoding='utf-8')
+          if 'fix-v04.js' not in s:
+              s = s.replace('</body>', '<script src="./fix-v04.js?v=04"></script>\n</body>')
+          p.write_text(s, encoding='utf-8')
+          PY
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
