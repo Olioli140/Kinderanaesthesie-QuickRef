@@ -1,4 +1,4 @@
-const CACHE='kinderquickref-v05';
+const CACHE='kinderquickref-v06';
 const ASSETS=['./manifest.webmanifest','./fix-v04.js','./icon-192.png','./icon-512.png','./apple-touch-icon.png'];
 
 self.addEventListener('install', event => {
@@ -7,11 +7,15 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
-      .then(() => self.clients.claim())
-  );
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)));
+    await self.clients.claim();
+    const clients = await self.clients.matchAll({ type: 'window' });
+    for (const client of clients) {
+      try { await client.navigate(client.url); } catch (_) {}
+    }
+  })());
 });
 
 async function patchedIndex(request) {
@@ -20,7 +24,7 @@ async function patchedIndex(request) {
     let html = await response.text();
     html = html.replace(/v0\.3/g, 'v0.4');
     if (!html.includes('fix-v04.js')) {
-      html = html.replace('</body>', '<script src="./fix-v04.js?v=05"></script></body>');
+      html = html.replace('</body>', '<script src="./fix-v04.js?v=06"></script></body>');
     }
     const headers = new Headers(response.headers);
     headers.set('content-type','text/html; charset=utf-8');
