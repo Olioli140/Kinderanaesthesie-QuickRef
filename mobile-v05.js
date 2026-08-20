@@ -13,8 +13,12 @@
     }
   };
   const renderVitalsMobile = () => {
-    const target=q('vitalCards'); if(!target || !window.vitalRows) return;
-    target.innerHTML=window.vitalRows.map(r=>`<div class="mobile-card"><h4>${r.label}</h4><div class="mobile-kv"><div class="mobile-label">Herzfrequenz</div><div class="mobile-value">${r.hr}</div><div class="mobile-label">syst. RR</div><div class="mobile-value">${r.sbp}</div><div class="mobile-label">Atemfrequenz</div><div class="mobile-value">${r.rr}</div><div class="mobile-label">typisches KG</div><div class="mobile-value">${r.w} kg</div></div></div>`).join('');
+    const target=q('vitalCards'), body=q('vitalTable'); if(!target || !body) return;
+    const rows=[...body.querySelectorAll('tr')];
+    target.innerHTML=rows.map(tr=>{
+      const c=[...tr.children].map(td=>td.textContent.trim());
+      return `<div class="mobile-card"><h4>${c[0]||''}</h4><div class="mobile-kv"><div class="mobile-label">Herzfrequenz</div><div class="mobile-value">${c[1]||'–'}</div><div class="mobile-label">syst. RR</div><div class="mobile-value">${c[2]||'–'}</div><div class="mobile-label">Atemfrequenz</div><div class="mobile-value">${c[3]||'–'}</div><div class="mobile-label">typisches KG</div><div class="mobile-value">${c[4]||'–'} kg</div></div></div>`;
+    }).join('');
   };
   const renderAirwayMobile = () => {
     const target=q('airwayCards'); if(!target) return;
@@ -30,5 +34,8 @@
     document.querySelectorAll('.quick button').forEach(b=>b.addEventListener('click',()=>setTimeout(render,0)));
     const title=document.querySelector('h1'); if(title) title.innerHTML=title.innerHTML.replace(/iPhone v0\.3|iPhone v0\.4/g,'iPhone v0.5');
     document.title=document.title.replace(/v0\.3|v0\.4/g,'v0.5');
+    const obs=new MutationObserver(()=>render());
+    const body=q('vitalTable'); if(body) obs.observe(body,{childList:true,subtree:true,characterData:true});
+    ['tubeUncuffed','tubeCuffed','tubeDepthOral','tubeDepthNasal','lma','vt','ventFreq'].forEach(id=>{const el=q(id);if(el)obs.observe(el,{childList:true,subtree:true,characterData:true});});
   });
 })();
